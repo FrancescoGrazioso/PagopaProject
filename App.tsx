@@ -1,118 +1,90 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- */
-
-import React from 'react';
-import type {PropsWithChildren} from 'react';
+import React, {useState} from 'react';
 import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  useColorScheme,
   View,
+  Text,
+  TextInput,
+  Button,
+  FlatList,
+  Image,
+  StyleSheet,
+  ActivityIndicator,
 } from 'react-native';
+import {getStargazers} from './src/api/api';
+import Card from './src/components/Card';
+import {axiosResponse} from './src/interfaces/axiosResponseInterface';
+import {listItemInterface} from './src/interfaces/listItemInterface';
+import { pageStyle } from './src/style/style';
 
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+const MyComponent = () => {
+  const [owner, setOwner] = useState('jshanson7');
+  const [repo, setRepo] = useState('react-native-swipeable');
+  const [pageNumber, setPageNumber] = useState(1);
+  const [stargazers, setStargazers] = useState<listItemInterface[]>([]);
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
-type SectionProps = PropsWithChildren<{
-  title: string;
-}>;
+  const handleSubmit = async () => {
+    setLoading(true);
+    if (owner && repo) {
+      const response: axiosResponse = await getStargazers(
+        owner,
+        repo,
+        pageNumber,
+      );
 
-function Section({children, title}: SectionProps): JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
-  return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
-    </View>
-  );
-}
-
-function App(): JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
-
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
+      if (response.axiosError) {
+        setError(response.axiosError);
+        setStargazers([]);
+      } else {
+        setError('');
+        setStargazers(stargazers.concat(response.stargazers));
+        setPageNumber(pageNumber + 1);
+      }
+      setLoading(false);
+    }
   };
 
   return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={backgroundStyle.backgroundColor}
+    <View style={pageStyle.container}>
+      <View style={{flexDirection: 'row', alignItems: 'center'}}>
+        <Text>GitHub Repo Owner:</Text>
+        <TextInput value={owner} onChangeText={text => setOwner(text)} />
+      </View>
+      <View style={{flexDirection: 'row', alignItems: 'center'}}>
+        <Text>GitHub Repo Name:</Text>
+        <TextInput value={repo} onChangeText={text => setRepo(text)} />
+      </View>
+      <Button
+        title="Submit"
+        onPress={handleSubmit}
+        disabled={!owner || !repo}
       />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <Header />
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.tsx</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
-        </View>
-      </ScrollView>
-    </SafeAreaView>
+      {error && <Text>{error}</Text>}
+      {stargazers && (
+        <FlatList
+        numColumns={2}
+        data={stargazers}
+        style={pageStyle.list}
+        onEndReached={handleSubmit}
+        keyExtractor={(item, index) => index.toString()}
+        renderItem={({item, index}) => (
+          // <View style={[styles.listItem, {width: '50%'}]}>
+          //   <Image
+          //     source={{
+          //       uri: item.avatar,
+          //     }}
+          //     style={styles.avatar}
+          //   />
+          //   <Text style={styles.username}>{item.username}</Text>
+          // </View>
+          <Card image={item.avatar} title={item.username}/>
+        )}
+      />
+      
+      )}
+      {loading && <ActivityIndicator />}
+    </View>
   );
-}
+};
 
-const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-  },
-  highlight: {
-    fontWeight: '700',
-  },
-});
-
-export default App;
+export default MyComponent;
