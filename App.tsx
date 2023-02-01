@@ -16,8 +16,8 @@ import {listItemInterface} from './src/interfaces/listItemInterface';
 import { pageStyle } from './src/style/style';
 
 const MyComponent = () => {
-  const [owner, setOwner] = useState('jshanson7');
-  const [repo, setRepo] = useState('react-native-swipeable');
+  const [owner, setOwner] = useState('');
+  const [repo, setRepo] = useState('');
   const [pageNumber, setPageNumber] = useState(1);
   const [stargazers, setStargazers] = useState<listItemInterface[]>([]);
   const [error, setError] = useState('');
