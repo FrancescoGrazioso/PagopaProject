@@ -7,7 +7,7 @@ import {axiosResponse} from './src/interfaces/axiosResponseInterface';
 import {listItemInterface} from './src/interfaces/listItemInterface';
 import {pageStyle} from './src/style/style';
 
-const MyComponent = () => {
+const App = () => {
   const [owner, setOwner] = useState('Avik-Jain');
   const [repo, setRepo] = useState('Digital-Image-Processing');
   const [pageNumber, setPageNumber] = useState(1);
@@ -62,4 +62,4 @@ const MyComponent = () => {
   );
 };
 
-export default MyComponent;
+export default App;
