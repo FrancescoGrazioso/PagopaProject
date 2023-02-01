@@ -13,7 +13,7 @@ const SearchListComponent = (props: SearchListInterface) => {
           numColumns={2}
           data={props.stargazers}
           style={listStyle.list}
-          onEndReached={() => props.handleSubmit()}
+          onEndReached={() => props.handleSubmit(false)}
           keyExtractor={(item, index) => index.toString()}
           renderItem={({item}) => (
             <Card image={item.avatar} title={item.username} />

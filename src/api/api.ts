@@ -8,7 +8,8 @@ export const getStargazers = async (owner: string, name: string, pageNumber?: nu
     };
     if (!pageNumber) pageNumber = 1
     try {
-      const response = await axios.get(`https://api.github.com/repos/${owner}/${name}/stargazers?page=${pageNumber}&per_page=30`);
+      const url = `https://api.github.com/repos/${owner}/${name}/stargazers?page=${pageNumber}&per_page=30`;
+      const response = await axios.get(url);
       const stargazersRes = await response.data.map((user: any) => ({ avatar: user.avatar_url, username: user.login }));
       
       resObject.stargazers = stargazersRes;

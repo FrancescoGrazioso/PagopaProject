@@ -9,19 +9,20 @@ import {pageStyle} from './src/style/style';
 
 const MyComponent = () => {
   const [owner, setOwner] = useState('Avik-Jain');
-  const [repo, setRepo] = useState('100-Days-Of-ML-Code');
+  const [repo, setRepo] = useState('Digital-Image-Processing');
   const [pageNumber, setPageNumber] = useState(1);
   const [stargazers, setStargazers] = useState<listItemInterface[]>([]);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (isNewSearch: boolean) => {
     setLoading(true);
+    const pageToUse = isNewSearch ? 1 : pageNumber;
     if (owner && repo) {
       const response: axiosResponse = await getStargazers(
         owner,
         repo,
-        pageNumber,
+        pageToUse,
       );
 
       if (response.axiosError) {
@@ -29,8 +30,13 @@ const MyComponent = () => {
         setStargazers([]);
       } else {
         setError('');
-        setStargazers(stargazers.concat(response.stargazers));
-        setPageNumber(pageNumber + 1);
+
+        if (isNewSearch) {
+          setStargazers(response.stargazers);
+        } else {
+          setStargazers(stargazers.concat(response.stargazers));
+        }
+        setPageNumber(pageToUse + 1);
       }
       setLoading(false);
     }

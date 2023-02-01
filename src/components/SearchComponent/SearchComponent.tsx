@@ -21,7 +21,7 @@ const SearchComponent = (props: SearchInterface) => {
       </View>
       <Button
         title="Submit"
-        onPress={() => {Keyboard.dismiss(); props.handleSubmit()}}
+        onPress={() => {Keyboard.dismiss(); props.handleSubmit(true)}}
         disabled={!props.owner || !props.repo}
       />
     </>
