@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, TextInput, Button} from 'react-native';
+import {View, Text, TextInput, Button, Keyboard} from 'react-native';
 import {SearchInterface} from '../../interfaces/searchInterface';
 
 const SearchComponent = (props: SearchInterface) => {
@@ -21,7 +21,7 @@ const SearchComponent = (props: SearchInterface) => {
       </View>
       <Button
         title="Submit"
-        onPress={() => props.handleSubmit()}
+        onPress={() => {Keyboard.dismiss(); props.handleSubmit()}}
         disabled={!props.owner || !props.repo}
       />
     </>
