@@ -1,23 +1,15 @@
 import React, {useState} from 'react';
-import {
-  View,
-  Text,
-  TextInput,
-  Button,
-  FlatList,
-  Image,
-  StyleSheet,
-  ActivityIndicator,
-} from 'react-native';
+import {View} from 'react-native';
 import {getStargazers} from './src/api/api';
-import Card from './src/components/Card';
+import SearchComponent from './src/components/SearchComponent/SearchComponent';
+import SearchListComponent from './src/components/SearchListComponent/SearchListComponent';
 import {axiosResponse} from './src/interfaces/axiosResponseInterface';
 import {listItemInterface} from './src/interfaces/listItemInterface';
-import { pageStyle } from './src/style/style';
+import {pageStyle} from './src/style/style';
 
 const MyComponent = () => {
-  const [owner, setOwner] = useState('');
-  const [repo, setRepo] = useState('');
+  const [owner, setOwner] = useState('Avik-Jain');
+  const [repo, setRepo] = useState('100-Days-Of-ML-Code');
   const [pageNumber, setPageNumber] = useState(1);
   const [stargazers, setStargazers] = useState<listItemInterface[]>([]);
   const [error, setError] = useState('');
@@ -46,43 +38,20 @@ const MyComponent = () => {
 
   return (
     <View style={pageStyle.container}>
-      <View style={{flexDirection: 'row', alignItems: 'center'}}>
-        <Text>GitHub Repo Owner:</Text>
-        <TextInput value={owner} onChangeText={text => setOwner(text)} />
-      </View>
-      <View style={{flexDirection: 'row', alignItems: 'center'}}>
-        <Text>GitHub Repo Name:</Text>
-        <TextInput value={repo} onChangeText={text => setRepo(text)} />
-      </View>
-      <Button
-        title="Submit"
-        onPress={handleSubmit}
-        disabled={!owner || !repo}
+      <SearchComponent
+        owner={owner}
+        repo={repo}
+        handleSubmit={handleSubmit}
+        handleOwnerChange={setOwner}
+        handleRepoChange={setRepo}
       />
-      {error && <Text>{error}</Text>}
-      {stargazers && (
-        <FlatList
-        numColumns={2}
-        data={stargazers}
-        style={pageStyle.list}
-        onEndReached={handleSubmit}
-        keyExtractor={(item, index) => index.toString()}
-        renderItem={({item, index}) => (
-          // <View style={[styles.listItem, {width: '50%'}]}>
-          //   <Image
-          //     source={{
-          //       uri: item.avatar,
-          //     }}
-          //     style={styles.avatar}
-          //   />
-          //   <Text style={styles.username}>{item.username}</Text>
-          // </View>
-          <Card image={item.avatar} title={item.username}/>
-        )}
+
+      <SearchListComponent
+        error={error}
+        handleSubmit={handleSubmit}
+        loading={loading}
+        stargazers={stargazers}
       />
-      
-      )}
-      {loading && <ActivityIndicator />}
     </View>
   );
 };

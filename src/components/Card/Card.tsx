@@ -1,11 +1,7 @@
 import React, {Component} from 'react';
 import {Text, View, Image} from 'react-native';
-import { cardStyle, pageStyle } from '../style/style';
-
-interface CardProps {
-  image: string;
-  title: string;
-}
+import { CardProps } from '../../interfaces/cardIntercafe';
+import { cardStyle } from './style';
 
 export default class Card extends Component<CardProps> {
   constructor(props: any) {
