@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, TextInput, Button, Keyboard} from 'react-native';
+import {View, Text, TextInput, Button, Keyboard, TouchableOpacity} from 'react-native';
 import renderer from 'react-test-renderer';
 import SearchComponent from '../src/components/SearchComponent/SearchComponent';
 
@@ -76,7 +76,7 @@ describe('SearchComponent', () => {
         handleSubmit={handleSubmit}
       />,
     );
-    const button = search.root.findByType(Button);
+    const button = search.root.findByType(TouchableOpacity);
     button.props.onPress();
     expect(called).toBeTruthy();
   });

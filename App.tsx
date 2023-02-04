@@ -8,8 +8,8 @@ import {listItemInterface} from './src/interfaces/listItemInterface';
 import {pageStyle} from './src/style/style';
 
 const App = () => {
-  const [owner, setOwner] = useState('');
-  const [repo, setRepo] = useState('');
+  const [owner, setOwner] = useState('sindresorhus');
+  const [repo, setRepo] = useState('awesome');
   const [pageNumber, setPageNumber] = useState(1);
   const [stargazers, setStargazers] = useState<listItemInterface[]>([]);
   const [error, setError] = useState('');
